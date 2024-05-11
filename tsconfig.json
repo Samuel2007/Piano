@@ -1,7 +1,10 @@
 {
   "extends": "expo/tsconfig.base",
+  "exclude": ["test.ts", "**/*.test.tsx"],
   "compilerOptions": {
-    "strict": true
+    "types": ["jest"],
+    "importHelpers": true,
+    "allowJs": true
   },
-  "exclude": ["test.ts", "**/*.test.tsx"]
+  "include": ["**/*.d.ts", "**/*.ts", "**/*.tsx"]
 }
