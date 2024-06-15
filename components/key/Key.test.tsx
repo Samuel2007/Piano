@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react-native";
 import Key from "./Key";
 
 test("should render Key text on the screen", () => {
-  render(<Key />);
+  render(<Key note="text" />);
 
   const key = screen.getByText("Key");
   expect(key).toBeOnTheScreen();

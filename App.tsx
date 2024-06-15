@@ -7,15 +7,13 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
+import Keyboard from "./components/keyboard/Keyboard";
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Hi</Text>
       <StatusBar style="auto" />
-      <TouchableOpacity>
-        <View></View>
-      </TouchableOpacity>
+      <Keyboard />
     </View>
   );
 }
