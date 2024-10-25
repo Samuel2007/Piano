@@ -31,9 +31,10 @@ const Key = ({ note, index }: KeyProps) => {
   const styles = getStyles(getTopOffeset(note)); // 70 -> topOffset
 
   return (
-    <View style={isBlackKey ? styles.blackKey : styles.whiteKey}>
-      <Text>{note}</Text>
-    </View>
+    <View
+      style={isBlackKey ? styles.blackKey : styles.whiteKey}
+      testID={note}
+    />
   );
 };
 
@@ -47,6 +48,7 @@ const getStyles = (topOffset: number) =>
       borderColor: "black",
       alignItems: "center",
       justifyContent: "center",
+      backgroundColor: "white",
     },
     blackKey: {
       position: "absolute",
@@ -58,5 +60,6 @@ const getStyles = (topOffset: number) =>
       backgroundColor: "black",
       alignItems: "center",
       justifyContent: "center",
+      zIndex: 10,
     },
   });
