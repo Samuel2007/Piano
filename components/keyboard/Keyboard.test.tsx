@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react-native";
 import Keyboard from "./Keyboard";
 
-test.each(["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"])(
+test.each(["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"])(
   "should always be 12 notes visible on screen",
   (note) => {
     render(<Keyboard />);
