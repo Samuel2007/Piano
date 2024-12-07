@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Keyboard from "./components/keyboard/Keyboard";
+import React from "react";
 
 export default function App() {
   return (

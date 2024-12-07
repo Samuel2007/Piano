@@ -5,12 +5,13 @@ import {
   Dimensions,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Audio } from "expo-av";
 
 type KeyProps = {
   note: string;
   index: number;
+  key: string;
 };
 
 const getNotePath = (note: string) => {
@@ -21,6 +22,27 @@ const getNotePath = (note: string) => {
       return require(`../../assets/pianoNotes/Db6.mp3`);
     case "D":
       return require(`../../assets/pianoNotes/D6.mp3`);
+    case "Eb":
+      return require(`../../assets/pianoNotes/Eb6.mp3`);
+    case "E":
+      return require(`../../assets/pianoNotes/E6.mp3`);
+    case "F":
+      return require(`../../assets/pianoNotes/F6.mp3`);
+    case "Gb":
+      return require(`../../assets/pianoNotes/Gb6.mp3`);
+    case "G":
+      return require(`../../assets/pianoNotes/G6.mp3`);
+    case "Ab":
+      return require(`../../assets/pianoNotes/Ab6.mp3`);
+    case "A":
+      return require(`../../assets/pianoNotes/A6.mp3`);
+    case "Bb":
+      return require(`../../assets/pianoNotes/Bb6.mp3`);
+    case "B":
+      return require(`../../assets/pianoNotes/B6.mp3`);
+    case "C":
+      return require(`../../assets/pianoNotes/C7.mp3`);
+
     default:
       return require(`../../assets/pianoNotes/E6.mp3`);
   }
@@ -49,26 +71,33 @@ const Key = ({ note, index }: KeyProps) => {
 
   const styles = getStyles(getTopOffeset(note)); // 70 -> topOffset
   const [sound, setSound] = useState<Audio.Sound>();
-  console.log(note);
+
+  useEffect(() => {
+    const setKeySound = async () => {
+      const { sound } = await Audio.Sound.createAsync(getNotePath(note), {
+        shouldPlay: false,
+      });
+      setSound(sound);
+    };
+    console.log("useEffect");
+    // check how many times useEffect is called
+    setKeySound();
+  }, [sound]);
+
+  // make more keys play in the same time
   async function playSound() {
-    console.log("Loading Sound");
-
-    const { sound } = await Audio.Sound.createAsync(getNotePath(note), {
-      shouldPlay: true,
-    });
-    setSound(sound);
-
-    console.log("Playing Sound");
-    await sound.playAsync();
+    console.log(sound);
+    if (sound) {
+      await sound.playAsync();
+      setSound(undefined);
+    }
   }
 
   const onPressInHandler = () => {
     playSound();
   };
 
-  const onPressOutHandler = () => {
-    console.log("stop playing note");
-  };
+  const onPressOutHandler = () => {};
 
   return (
     <TouchableOpacity
