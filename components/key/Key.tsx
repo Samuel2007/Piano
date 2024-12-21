@@ -71,25 +71,36 @@ const Key = ({ note, index }: KeyProps) => {
 
   const styles = getStyles(getTopOffeset(note)); // 70 -> topOffset
   const [sound, setSound] = useState<Audio.Sound>();
+  // const [sound2, setSound2] = useState<Audio.Sound>();
+
+  const setKeySound = async () => {
+    const { sound } = await Audio.Sound.createAsync(getNotePath(note), {
+      shouldPlay: false,
+    });
+    setSound(sound);
+  };
+
+  // const setKeySound2 = async () => {
+  //   const { sound: sound2 } = await Audio.Sound.createAsync(getNotePath("D"), {
+  //     shouldPlay: false,
+  //   });
+  //   setSound2(sound2);
+  // };
 
   useEffect(() => {
-    const setKeySound = async () => {
-      const { sound } = await Audio.Sound.createAsync(getNotePath(note), {
-        shouldPlay: false,
-      });
-      setSound(sound);
-    };
     console.log("useEffect");
     // check how many times useEffect is called
+
     setKeySound();
-  }, [sound]);
+  }, []);
 
   // make more keys play in the same time
   async function playSound() {
     console.log(sound);
     if (sound) {
-      await sound.playAsync();
-      setSound(undefined);
+      sound.replayAsync();
+
+      // setKeySound();
     }
   }
 
