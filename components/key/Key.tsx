@@ -14,6 +14,7 @@ type KeyProps = {
   key: string;
 };
 
+// @REVIEW: `note` could be a string literal type (which would be more precise)
 const getNotePath = (note: string) => {
   switch (note) {
     case "C":
@@ -51,6 +52,9 @@ const getNotePath = (note: string) => {
 const Key = ({ note, index }: KeyProps) => {
   const isBlackKey = note.includes("b");
 
+  // @REVIEW: typo in getTopOffeset (-> getTopOffset)
+  // @REVIEW: unused `note` variable
+  // @REVIEW: the offset calculation could be done algorithmically
   function getTopOffeset(note: string) {
     if (isBlackKey) {
       switch (index) {
