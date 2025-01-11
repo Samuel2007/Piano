@@ -8,13 +8,27 @@ import {
 import React, { useState, useEffect } from "react";
 import { Audio } from "expo-av";
 
+export type NoteType =
+  | "C"
+  | "Db"
+  | "D"
+  | "Eb"
+  | "E"
+  | "F"
+  | "Gb"
+  | "G"
+  | "Ab"
+  | "A"
+  | "Bb"
+  | "B";
+
 type KeyProps = {
-  note: string;
+  note: NoteType;
   index: number;
   key: string;
 };
 
-const getNotePath = (note: string) => {
+const getNotePath = (note: NoteType) => {
   switch (note) {
     case "C":
       return require(`../../assets/pianoNotes/C6.mp3`);
