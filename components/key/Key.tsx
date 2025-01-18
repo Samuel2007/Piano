@@ -7,6 +7,7 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { Audio } from "expo-av";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
 
 export type NoteType =
   | "C"
@@ -23,12 +24,12 @@ export type NoteType =
   | "B";
 
 type KeyProps = {
-  note: NoteType;
+  note: string;
   index: number;
   key: string;
 };
 
-const getNotePath = (note: NoteType) => {
+const getNotePath = (note: string) => {
   switch (note) {
     case "C":
       return require(`../../assets/pianoNotes/C6.mp3`);
@@ -64,6 +65,10 @@ const getNotePath = (note: NoteType) => {
 
 const Key = ({ note, index }: KeyProps) => {
   const isBlackKey = note.includes("b");
+  const [sound, setSound] = useState<Audio.Sound>();
+  const [activeTouches, setActiveTouches] = useState<{
+    [key: string]: boolean;
+  }>({});
 
   function getTopOffeset(note: string) {
     if (isBlackKey) {
@@ -83,58 +88,75 @@ const Key = ({ note, index }: KeyProps) => {
     return 1000;
   }
 
-  const styles = getStyles(getTopOffeset(note)); // 70 -> topOffset
-  const [sound, setSound] = useState<Audio.Sound>();
-  // const [sound2, setSound2] = useState<Audio.Sound>();
-
-  const setKeySound = async () => {
-    const { sound } = await Audio.Sound.createAsync(getNotePath(note), {
-      shouldPlay: false,
-    });
-    setSound(sound);
-  };
-
-  // const setKeySound2 = async () => {
-  //   const { sound: sound2 } = await Audio.Sound.createAsync(getNotePath("D"), {
-  //     shouldPlay: false,
-  //   });
-  //   setSound2(sound2);
-  // };
+  const styles = getStyles(getTopOffeset(note));
 
   useEffect(() => {
-    console.log("useEffect");
-    // check how many times useEffect is called
-
     setKeySound();
+    return () => {
+      sound?.unloadAsync();
+    };
   }, []);
 
-  // make more keys play in the same time
-  async function playSound() {
-    console.log(sound);
-    if (sound) {
-      sound.replayAsync();
+  const setKeySound = async () => {
+    try {
+      const { sound } = await Audio.Sound.createAsync(getNotePath(note), {
+        shouldPlay: false,
+        progressUpdateIntervalMillis: 0,
+      });
+      setSound(sound);
+    } catch (error) {
+      console.error("Error loading sound:", error);
+    }
+  };
 
-      // setKeySound();
+  async function playSound() {
+    try {
+      if (sound) {
+        await sound.stopAsync();
+        await sound.setPositionAsync(0);
+        await sound.playAsync();
+      }
+    } catch (error) {
+      console.error("Error playing sound:", error);
+      await setKeySound();
     }
   }
 
-  const onPressInHandler = () => {
-    playSound();
+  const handleTouches = (event: any, isPressing: boolean) => {
+    const touches = event.allTouches.map((touch: any) => ({
+      id: touch.id,
+      x: touch.absoluteX,
+      y: touch.absoluteY,
+    }));
+
+    const updatedTouches: { [key: string]: boolean } = {};
+    touches.forEach(({ id }: { id: string }) => {
+      updatedTouches[id] = true;
+      if (isPressing && !activeTouches[id]) {
+        playSound();
+      }
+    });
+
+    setActiveTouches(isPressing ? updatedTouches : {});
   };
 
-  const onPressOutHandler = () => {};
+  const gesture = Gesture.Pan()
+    .onTouchesDown((event) => handleTouches(event, true))
+    .onTouchesMove((event) => handleTouches(event, true))
+    .onTouchesUp(() => setActiveTouches({}));
 
   return (
-    <TouchableOpacity
-      onPressIn={onPressInHandler}
-      onPressOut={onPressOutHandler}
-      style={isBlackKey ? styles.blackKey : styles.whiteKey}
-      testID={note}
-    />
+    <GestureDetector gesture={gesture}>
+      <View
+        style={[
+          isBlackKey ? styles.blackKey : styles.whiteKey,
+          Object.keys(activeTouches).length > 0 && styles.pressedKey,
+        ]}
+        testID={note}
+      />
+    </GestureDetector>
   );
 };
-
-export default Key;
 
 const getStyles = (topOffset: number) =>
   StyleSheet.create({
@@ -158,4 +180,9 @@ const getStyles = (topOffset: number) =>
       justifyContent: "center",
       zIndex: 10,
     },
+    pressedKey: {
+      backgroundColor: "#ddd",
+    },
   });
+
+export default Key;

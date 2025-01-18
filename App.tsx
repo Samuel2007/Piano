@@ -9,13 +9,16 @@ import {
 } from "react-native";
 import Keyboard from "./components/keyboard/Keyboard";
 import React from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <StatusBar style="auto" />
-      <Keyboard />
-    </View>
+    <GestureHandlerRootView>
+      <View style={styles.container}>
+        <StatusBar style="auto" />
+        <Keyboard />
+      </View>
+    </GestureHandlerRootView>
   );
 }
 
