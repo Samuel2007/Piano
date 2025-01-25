@@ -11,7 +11,7 @@ test("should render white Key on screen if note prop doesn't contain b", () => {
 });
 
 test("should render black Key on screen if note prop contains b", () => {
-  const note = "Cb";
+  const note = "Db";
   render(<Key key={note} note={note} index={0} />);
   const key = screen.getByTestId(note);
   expect(key).toHaveStyle({ backgroundColor: "black" });

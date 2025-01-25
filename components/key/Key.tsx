@@ -5,7 +5,7 @@ import {
   Dimensions,
   TouchableOpacity,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Audio } from "expo-av";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 
@@ -24,42 +24,42 @@ export type NoteType =
   | "B";
 
 type KeyProps = {
-  note: string;
+  note: NoteType;
   index: number;
   key: string;
 };
 
-const getNotePath = (note: string) => {
+const getNotePath = (note: NoteType) => {
   switch (note) {
     case "C":
-      return require(`../../assets/pianoNotes/C6.mp3`);
+      return require(`../../assets/pianoNotes/C3.mp3`);
     case "Db":
-      return require(`../../assets/pianoNotes/Db6.mp3`);
+      return require(`../../assets/pianoNotes/Db3.mp3`);
     case "D":
-      return require(`../../assets/pianoNotes/D6.mp3`);
+      return require(`../../assets/pianoNotes/D3.mp3`);
     case "Eb":
-      return require(`../../assets/pianoNotes/Eb6.mp3`);
+      return require(`../../assets/pianoNotes/Eb3.mp3`);
     case "E":
-      return require(`../../assets/pianoNotes/E6.mp3`);
+      return require(`../../assets/pianoNotes/E3.mp3`);
     case "F":
-      return require(`../../assets/pianoNotes/F6.mp3`);
+      return require(`../../assets/pianoNotes/F3.mp3`);
     case "Gb":
-      return require(`../../assets/pianoNotes/Gb6.mp3`);
+      return require(`../../assets/pianoNotes/Gb3.mp3`);
     case "G":
-      return require(`../../assets/pianoNotes/G6.mp3`);
+      return require(`../../assets/pianoNotes/G3.mp3`);
     case "Ab":
-      return require(`../../assets/pianoNotes/Ab6.mp3`);
+      return require(`../../assets/pianoNotes/Ab3.mp3`);
     case "A":
-      return require(`../../assets/pianoNotes/A6.mp3`);
+      return require(`../../assets/pianoNotes/A3.mp3`);
     case "Bb":
-      return require(`../../assets/pianoNotes/Bb6.mp3`);
+      return require(`../../assets/pianoNotes/Bb3.mp3`);
     case "B":
-      return require(`../../assets/pianoNotes/B6.mp3`);
+      return require(`../../assets/pianoNotes/B3.mp3`);
     case "C":
-      return require(`../../assets/pianoNotes/C7.mp3`);
+      return require(`../../assets/pianoNotes/C4.mp3`);
 
     default:
-      return require(`../../assets/pianoNotes/E6.mp3`);
+      return require(`../../assets/pianoNotes/E3.mp3`);
   }
 };
 
@@ -70,20 +70,17 @@ const Key = ({ note, index }: KeyProps) => {
     [key: string]: boolean;
   }>({});
 
-  function getTopOffeset(note: string) {
+  const intervalRef = useRef<NodeJS.Timeout>();
+
+  function getTopOffeset(note: NoteType) {
     if (isBlackKey) {
-      switch (index) {
-        case 1:
-          return 75;
-        case 3:
-          return 175;
-        case 6:
-          return 375;
-        case 8:
-          return 475;
-        case 10:
-          return 575;
-      }
+      const baseOffset = 75;
+      const spacing = 50;
+      let adjustedIndex = index;
+      if (index > 5) adjustedIndex += 1;
+      if (index > 10) adjustedIndex += 1;
+
+      return baseOffset + (adjustedIndex - 1) * spacing;
     }
     return 1000;
   }
@@ -112,9 +109,15 @@ const Key = ({ note, index }: KeyProps) => {
   async function playSound() {
     try {
       if (sound) {
+        clearInterval(intervalRef.current);
         await sound.stopAsync();
-        await sound.setPositionAsync(0);
+        await sound?.setVolumeAsync(1);
         await sound.playAsync();
+
+        // setTimeout(() => {
+        //   sound.setPositionAsync(200);
+        //   sound.setIsLoopingAsync(true);
+        // }, 1000);
       }
     } catch (error) {
       console.error("Error playing sound:", error);
@@ -134,6 +137,16 @@ const Key = ({ note, index }: KeyProps) => {
       updatedTouches[id] = true;
       if (isPressing && !activeTouches[id]) {
         playSound();
+      } else {
+        let volume = 1;
+        intervalRef.current = setInterval(() => {
+          console.log(volume);
+          if (volume < 0) {
+            clearInterval(intervalRef.current);
+          }
+          sound?.setVolumeAsync(volume);
+          volume = volume - 0.1;
+        }, 50);
       }
     });
 
@@ -143,7 +156,12 @@ const Key = ({ note, index }: KeyProps) => {
   const gesture = Gesture.Pan()
     .onTouchesDown((event) => handleTouches(event, true))
     .onTouchesMove((event) => handleTouches(event, true))
-    .onTouchesUp(() => setActiveTouches({}));
+    .onTouchesUp((event) => {
+      // console.log("on touch up");
+      // stop playing sound
+      handleTouches(event, false);
+      setActiveTouches({});
+    });
 
   return (
     <GestureDetector gesture={gesture}>
