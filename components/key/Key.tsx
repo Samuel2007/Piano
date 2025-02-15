@@ -112,6 +112,11 @@ const Key = ({ note, index }: KeyProps) => {
         clearInterval(intervalRef.current);
         await sound.stopAsync();
         await sound?.setVolumeAsync(1);
+        console.log(
+          `volumeRef.current, for note - ${note} -`,
+          volumeRef.current
+        );
+
         await sound.playAsync();
 
         // setTimeout(() => {
@@ -125,40 +130,73 @@ const Key = ({ note, index }: KeyProps) => {
     }
   }
 
+  const volumeRef = useRef(1);
+
   const handleTouches = (event: any, isPressing: boolean) => {
     const touches = event.allTouches.map((touch: any) => ({
       id: touch.id,
       x: touch.absoluteX,
       y: touch.absoluteY,
     }));
-
     const updatedTouches: { [key: string]: boolean } = {};
     touches.forEach(({ id }: { id: string }) => {
       updatedTouches[id] = true;
+      // if (isPressing && !activeTouches[id]) {
       if (isPressing && !activeTouches[id]) {
+        console.log("play sound");
+        volumeRef.current = 1;
         playSound();
-      } else {
-        let volume = 1;
-        intervalRef.current = setInterval(() => {
-          console.log(volume);
-          if (volume < 0) {
-            clearInterval(intervalRef.current);
-          }
-          sound?.setVolumeAsync(volume);
-          volume = volume - 0.1;
-        }, 50);
       }
     });
 
     setActiveTouches(isPressing ? updatedTouches : {});
   };
 
+  const setVolumeDown = () => {
+    const VOLUME_DOWN_INTERVAL = 100;
+
+    //TODO refactor to clear timeouts
+    setTimeout(() => {
+      sound?.setVolumeAsync(0);
+    }, VOLUME_DOWN_INTERVAL * 10);
+    setTimeout(() => {
+      sound?.setVolumeAsync(0.1);
+    }, VOLUME_DOWN_INTERVAL * 9);
+    setTimeout(() => {
+      sound?.setVolumeAsync(0.2);
+    }, VOLUME_DOWN_INTERVAL * 8);
+    setTimeout(() => {
+      sound?.setVolumeAsync(0.3);
+    }, VOLUME_DOWN_INTERVAL * 7);
+    setTimeout(() => {
+      sound?.setVolumeAsync(0.4);
+    }, VOLUME_DOWN_INTERVAL * 6);
+    setTimeout(() => {
+      sound?.setVolumeAsync(0.5);
+    }, VOLUME_DOWN_INTERVAL * 5);
+    setTimeout(() => {
+      sound?.setVolumeAsync(0.6);
+    }, VOLUME_DOWN_INTERVAL * 4);
+    setTimeout(() => {
+      sound?.setVolumeAsync(0.7);
+    }, VOLUME_DOWN_INTERVAL * 3);
+    setTimeout(() => {
+      sound?.setVolumeAsync(0.8);
+    }, VOLUME_DOWN_INTERVAL * 2);
+    setTimeout(() => {
+      sound?.setVolumeAsync(0.9);
+    }, VOLUME_DOWN_INTERVAL);
+  };
+
   const gesture = Gesture.Pan()
     .onTouchesDown((event) => handleTouches(event, true))
-    .onTouchesMove((event) => handleTouches(event, true))
+    .onTouchesMove((event) => {
+      handleTouches(event, true);
+      console.log("handle move");
+    })
     .onTouchesUp((event) => {
-      // console.log("on touch up");
-      // stop playing sound
+      setVolumeDown();
+      console.log("stop playing sound");
       handleTouches(event, false);
       setActiveTouches({});
     });
