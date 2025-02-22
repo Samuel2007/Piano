@@ -1,6 +1,7 @@
 import { View, Text } from "react-native";
 import React from "react";
-import Key, { NoteType } from "../key/Key";
+import Key from "../key/Key";
+import { NoteType } from "../key/Key.types";
 
 const notes: NoteType[] = [
   "C",
