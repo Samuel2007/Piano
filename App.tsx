@@ -4,14 +4,20 @@ import Keyboard from "./components/keyboard/Keyboard";
 import React from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import SettingHub from "./components/settingHub/SettingHub";
+import { createContext } from "react";
+import { OctaveAmountContextProvider } from "./contexts/OctaveAmountContext";
+
+export const OctaveAmountContext = createContext(1);
 
 export default function App() {
   return (
     <GestureHandlerRootView>
       <View style={styles.container}>
         <StatusBar style="auto" />
-        <Keyboard />
-        <SettingHub />
+        <OctaveAmountContextProvider>
+          <Keyboard />
+          <SettingHub />
+        </OctaveAmountContextProvider>
       </View>
     </GestureHandlerRootView>
   );

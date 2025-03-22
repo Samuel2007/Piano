@@ -1,13 +1,20 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import React from "react";
+import OctaveAmountChanger from "./components/OctaveAmountChanger";
 
 const SettingHub = () => {
-  return <View style={styles.container}>{/* set setOctaveCount  */}</View>;
+  return (
+    <View style={styles.container}>
+      <OctaveAmountChanger />
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
   container: {
-    width: 130,
+    height: "100%",
+    width: 100,
+    backgroundColor: "#4A4A4A",
   },
 });
 
