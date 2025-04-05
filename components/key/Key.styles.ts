@@ -24,4 +24,10 @@ export const getStyles = (topOffset: number) =>
     pressedKey: {
       backgroundColor: "#ddd",
     },
+    twoOcatvesWhiteKey: {
+      height: 50,
+    },
+    twoOcatvesBlackKey: {
+      height: 25,
+    },
   });

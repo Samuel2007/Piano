@@ -5,7 +5,7 @@ import { useOctaveAmountContext } from "../../../contexts/OctaveAmountContext";
 
 const OctaveAmountChanger = () => {
   const { octaves, currentOctave, setCurrentOctave } = useOctaveAmountContext();
-  console.log(currentOctave);
+
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Octaves:</Text>

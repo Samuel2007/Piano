@@ -5,14 +5,17 @@ import { getTopOffeset } from "./utils";
 import { KeyProps } from "./Key.types";
 import { getStyles } from "./Key.styles";
 import { useKeySound } from "./hooks/useKeySound";
+import { useOctaveAmountContext } from "../../contexts/OctaveAmountContext";
 
 const Key = ({ note, index }: KeyProps) => {
   const isBlackKey = note.includes("b");
   const [activeTouches, setActiveTouches] = useState<{
     [key: string]: boolean;
   }>({});
+  const { currentOctave } = useOctaveAmountContext();
+  const hasTwoOctaves = currentOctave === 2;
 
-  const styles = getStyles(getTopOffeset(isBlackKey, index));
+  const styles = getStyles(getTopOffeset(isBlackKey, index, hasTwoOctaves));
 
   const { playSound, setVolumeDown } = useKeySound(note);
 
@@ -44,11 +47,15 @@ const Key = ({ note, index }: KeyProps) => {
       setActiveTouches({});
     });
 
+  const keyStyles = isBlackKey
+    ? [styles.blackKey, currentOctave === 2 && styles.twoOcatvesBlackKey]
+    : [styles.whiteKey, currentOctave === 2 && styles.twoOcatvesWhiteKey];
+
   return (
     <GestureDetector gesture={gesture}>
       <View
         style={[
-          isBlackKey ? styles.blackKey : styles.whiteKey,
+          ...keyStyles,
           Object.keys(activeTouches).length > 0 && styles.pressedKey,
         ]}
         testID={note}
