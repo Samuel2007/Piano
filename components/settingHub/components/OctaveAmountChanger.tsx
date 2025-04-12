@@ -1,18 +1,18 @@
 import { View, Text, StyleSheet } from "react-native";
 import React from "react";
 import { RadioButton } from "./RadioButton";
-import { useOctaveAmountContext } from "../../../contexts/OctaveAmountContext";
+import { useOctaveContext } from "../../../contexts/OctaveContext";
 
 const OctaveAmountChanger = () => {
-  const { octaves, currentOctave, setCurrentOctave } = useOctaveAmountContext();
+  const { octaveAmount, currentOctave, setOctaveAmount } = useOctaveContext();
 
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Octaves:</Text>
       <RadioButton
-        options={octaves}
-        selectedOption={currentOctave}
-        onSelect={(option) => setCurrentOctave(option)}
+        options={[1, 2]}
+        selectedOption={octaveAmount}
+        onSelect={(option) => setOctaveAmount(option)}
       />
     </View>
   );

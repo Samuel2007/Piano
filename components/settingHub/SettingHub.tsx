@@ -1,11 +1,13 @@
 import { View, StyleSheet } from "react-native";
 import React from "react";
 import OctaveAmountChanger from "./components/OctaveAmountChanger";
+import OctaveChanger from "./components/OctaveChanger";
 
 const SettingHub = () => {
   return (
     <View style={styles.container}>
       <OctaveAmountChanger />
+      {/* <OctaveChanger /> */}
     </View>
   );
 };
