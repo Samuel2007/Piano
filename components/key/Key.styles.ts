@@ -30,4 +30,9 @@ export const getStyles = (topOffset: number) =>
     twoOcatvesBlackKey: {
       height: 25,
     },
+    text: {
+      transform: [{ rotate: "90deg" }],
+      marginRight: 150,
+      color: "#9DE9EB",
+    },
   });

@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { Text, View } from "react-native";
 import React, { useState } from "react";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { getTopOffeset } from "./utils";
@@ -59,7 +59,9 @@ const Key = ({ note, index }: KeyProps) => {
           Object.keys(activeTouches).length > 0 && styles.pressedKey,
         ]}
         testID={note}
-      />
+      >
+        <Text style={styles.text}>{note}</Text>
+      </View>
     </GestureDetector>
   );
 };

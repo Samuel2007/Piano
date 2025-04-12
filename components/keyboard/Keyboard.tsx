@@ -30,6 +30,7 @@ const notes: NoteType[] = [
   "B4",
   "C5",
 ];
+
 export default function Keyboard() {
   return (
     <ScrollView style={{ flex: 1, width: "100%" }}>
