@@ -6,7 +6,6 @@ import { KeyProps } from "./Key.types";
 import { getStyles } from "./Key.styles";
 import { useKeySound } from "./hooks/useKeySound";
 import { useOctaveContext } from "../../contexts/OctaveContext";
-import OctaveAmountChanger from "../settingHub/components/OctaveAmountChanger";
 
 const Key = ({ note, index }: KeyProps) => {
   const isBlackKey = note.includes("b");

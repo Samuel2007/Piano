@@ -4,7 +4,7 @@ import { RadioButton } from "./RadioButton";
 import { useOctaveContext } from "../../../contexts/OctaveContext";
 
 const OctaveAmountChanger = () => {
-  const { octaveAmount, currentOctave, setOctaveAmount } = useOctaveContext();
+  const { octaveAmount, setOctaveAmount } = useOctaveContext();
 
   return (
     <View style={styles.container}>
@@ -23,6 +23,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
     marginLeft: 30,
     transform: [{ rotate: "90deg" }],
+    zIndex: 10,
   },
   text: {
     color: "white",

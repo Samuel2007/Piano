@@ -7,7 +7,7 @@ const SettingHub = () => {
   return (
     <View style={styles.container}>
       <OctaveAmountChanger />
-      {/* <OctaveChanger /> */}
+      <OctaveChanger />
     </View>
   );
 };

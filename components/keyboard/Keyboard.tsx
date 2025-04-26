@@ -2,36 +2,43 @@ import { ScrollView } from "react-native";
 import React from "react";
 import Key from "../key/Key";
 import { NoteType } from "../key/Key.types";
+import { useOctaveContext } from "../../contexts/OctaveContext";
 
-const notes: NoteType[] = [
-  "C3",
-  "Db3",
-  "D3",
-  "Eb3",
-  "E3",
-  "F3",
-  "Gb3",
-  "G3",
-  "Ab3",
-  "A3",
-  "Bb3",
-  "B3",
-  "C4",
-  "Db4",
-  "D4",
-  "Eb4",
-  "E4",
-  "F4",
-  "Gb4",
-  "G4",
-  "Ab4",
-  "A4",
-  "Bb4",
-  "B4",
-  "C5",
-];
+const getNotes = (currentOctave: number) => {
+  return [
+    `C${currentOctave}`,
+    `Db${currentOctave}`,
+    `D${currentOctave}`,
+    `Eb${currentOctave}`,
+    `E${currentOctave}`,
+    `F${currentOctave}`,
+    `Gb${currentOctave}`,
+    `G${currentOctave}`,
+    `Ab${currentOctave}`,
+    `A${currentOctave}`,
+    `Bb${currentOctave}`,
+    `B${currentOctave}`,
+    `C${currentOctave + 1}`,
+    `Db${currentOctave + 1}`,
+    `D${currentOctave + 1}`,
+    `Eb${currentOctave + 1}`,
+    `E${currentOctave + 1}`,
+    `F${currentOctave + 1}`,
+    `Gb${currentOctave + 1}`,
+    `G${currentOctave + 1}`,
+    `Ab${currentOctave + 1}`,
+    `A${currentOctave + 1}`,
+    `Bb${currentOctave + 1}`,
+    `B${currentOctave + 1}`,
+    `C${currentOctave + 2}`,
+  ];
+};
 
 export default function Keyboard() {
+  const { currentOctave } = useOctaveContext();
+  const notes = getNotes(currentOctave);
+
+  console.log("Notes:", notes);
   return (
     <ScrollView style={{ flex: 1, width: "100%" }}>
       {notes.map((key, index) => {

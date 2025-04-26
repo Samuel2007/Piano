@@ -1,32 +1,48 @@
 import { View, Image, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
+import { useOctaveContext } from "../../../contexts/OctaveContext";
 
 const OctaveChanger = () => {
-  const [octaveAmount, setoctaveAmount] = React.useState(3); // Default octave
+  const { currentOctave, setCurrentOctave } = useOctaveContext();
+
+  const onLeftPressHandler = () => {
+    if (currentOctave > 0) {
+      setCurrentOctave(currentOctave - 1);
+    }
+  };
+  const onRightPressHandler = () => {
+    if (currentOctave < 7) {
+      setCurrentOctave(currentOctave + 1);
+    }
+  };
+
+  console.log("Current Octave: ", currentOctave);
 
   return (
     <View style={styles.container}>
       <TouchableOpacity
-        onPress={() => {
-          console.log("Octave Down Pressed");
-        }}
+        onPress={onLeftPressHandler}
+        style={styles.touchableArrowLeft}
       >
-        <Image
-          style={styles.arrowLeft}
-          source={require("../../../assets/arrow.png")}
-          resizeMode="contain"
-        />
+        {currentOctave !== 0 ? (
+          <Image
+            style={styles.arrowLeft}
+            source={require("../../../assets/arrow.png")}
+            resizeMode="contain"
+          />
+        ) : null}
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => {
-          console.log("Octave Up Pressed");
-        }}
+        onPress={onRightPressHandler}
+        style={styles.touchableArrowRight}
       >
-        <Image
-          style={styles.arrowRight}
-          source={require("../../../assets/arrow.png")}
-          resizeMode="contain"
-        />
+        {currentOctave !== 7 ? (
+          <Image
+            style={styles.arrowRight}
+            source={require("../../../assets/arrow.png")}
+            resizeMode="contain"
+          />
+        ) : null}
       </TouchableOpacity>
     </View>
   );
@@ -39,11 +55,19 @@ const styles = StyleSheet.create({
     marginLeft: -60,
   },
   arrowLeft: {
-    transform: [{ rotate: "270deg" }],
     width: 100,
     height: 40,
   },
   arrowRight: {
+    width: 100,
+    height: 40,
+  },
+  touchableArrowLeft: {
+    transform: [{ rotate: "270deg" }],
+    width: 100,
+    height: 40,
+  },
+  touchableArrowRight: {
     transform: [{ rotate: "90deg" }],
     width: 100,
     height: 40,

@@ -5,22 +5,17 @@ interface OctaveType {
   currentOctave: number;
   octaveAmount: number;
   setOctaveAmount: (ocatve: number) => void;
+  setCurrentOctave: (octave: number) => void;
+  octaves: number[];
 }
+const octaves = [0, 1, 2, 3, 4, 5, 6, 7]; // Define the octaves
 
-// Create context with initial values
-// const OctaveAmountContext = createContext<OctaveType>({
-//   octaves: [1, 2],
-//   octaveAmount: 1,
-//   setoctaveAmount: () => {},
-// });
-
-// Create context with initial values
 const OctaveContext = createContext<OctaveType>({
-  // octaves: [1, 2, 3, 4, 5, 6, 7, 8],
+  octaves,
   currentOctave: 3,
   octaveAmount: 1,
   setOctaveAmount: () => {},
-  // setoctaveAmount: () => {},
+  setCurrentOctave: () => {},
 });
 
 // Create a provider component
@@ -30,12 +25,14 @@ interface MyContextProviderProps {
 
 export const OctaveContextProvider = ({ children }: MyContextProviderProps) => {
   const [octaveAmount, setOctaveAmount] = useState<number>(1);
+  const [currentOctave, setCurrentOctave] = useState<number>(3);
 
-  const currentOctave = 3;
   const contextValue: OctaveType = {
+    octaves,
     currentOctave,
     octaveAmount,
     setOctaveAmount,
+    setCurrentOctave,
   };
 
   return (

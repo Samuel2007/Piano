@@ -23,8 +23,10 @@ export const useKeySound = (note: NoteType) => {
   };
 
   useEffect(() => {
+    console.log("Loading sound for note:", note);
     setKeySound();
     return () => {
+      console.log("Unloading sound for note:", note);
       sound?.unloadAsync();
     };
   }, []);
@@ -35,6 +37,7 @@ export const useKeySound = (note: NoteType) => {
         timeoutsRef.current.forEach((timeout) => {
           clearTimeout(timeout);
         });
+        console.log(sound);
         await sound.stopAsync();
         await sound?.setVolumeAsync(1);
         await sound.playAsync();
